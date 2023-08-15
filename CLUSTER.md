@@ -71,7 +71,13 @@
    helm upgrade --install ingress-nginx ingress-nginx \
      --create-namespace --namespace ingress-nginx \
      --repo https://kubernetes.github.io/ingress-nginx \
-     --values ingress-nginx-aws.yaml
+     --set 'controller.service.type=LoadBalancer' \
+     --set 'controller.service.annotations.service\.beta\.kubernetes\.io/aws-load-balancer-type=external' \
+     --set 'controller.service.annotations.service\.beta\.kubernetes\.io/aws-load-balancer-scheme=internet-facing' \
+     --set 'controller.service.annotations.service\.beta\.kubernetes\.io/aws-load-balancer-nlb-target-type=ip' \
+     --set 'controller.service.annotations.service\.beta\.kubernetes\.io/aws-load-balancer-healthcheck-protocol=http' \
+     --set 'controller.service.annotations.service\.beta\.kubernetes\.io/aws-load-balancer-healthcheck-path=/healthz' \
+     --set 'controller.service.annotations.service\.beta\.kubernetes\.io/aws-load-balancer-healthcheck-port=10254'
    ```
 
 1. Configure the self-signed certificate issuer.
